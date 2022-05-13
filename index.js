@@ -1,28 +1,27 @@
-var express = require('express');
-var app = express();
-var server = require('http').createServer(app);
-var io = require('socket.io')(server);
+const express = require('express');
+const app = express();
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
+
 server.listen(process.env.PORT || 3000);
-console.log('Server is running ');
+console.log('Сервер працює ');
 
-
-app.get('/', function(request, respons) {
-    respons.sendFile(__dirname + '/index.html');
+app.get('/', function(req, res) {
+    res.sendFile(__dirname + '/index.html');
 });
 
-users = [];
 connections = [];
 
 io.sockets.on('connection', function(socket){
-    console.log('Connection success');
+    console.log('Підключено');
     connections.push(socket);
 
-    socket.on('disconnect', function(data){
+    socket.on('disconnect', function(){
         connections.splice(connections.indexOf(socket), 1);
-        console.log('Disconnect success');
+        console.log('Відключено');
     });
 
     socket.on('send mess', function(data){
-        io.sockets.emit('add mess', {mess: data.mess, name: data.name});
+        io.sockets.emit('add mess', {mess: data.mess, name: data.name, className: data.className});
     });
 });

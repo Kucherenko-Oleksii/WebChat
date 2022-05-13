@@ -8,24 +8,17 @@
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
     />
-    <style>
-      body {
-        background-color: rgb(178, 155, 155);
-      }
-    </style>
     <title>Чатік)</title>
   </head>
   <body>
     <div class="container">
       <div class="py-5 text-center">
-        <h2>Чатік)</h2>
-        <p class="lead">Ти хто?)</p>
+        <h2>WebChat</h2>
       </div>
       <div class="row">
         <div class="col-6">
-          <!-- Форма для получения сообщений и имени -->
           <h3>Форма повідомлень</h3>
-          <form id="messForm">
+          <form id="messForm" method="post">
             <label for="name">Ім'я</label>
             <input
               type="text"
@@ -33,6 +26,7 @@
               id="name"
               placeholder="Введіть Ім'я"
               class="form-control"
+              required
             />
             <br />
             <label for="message">Повідомлення</label>
@@ -41,21 +35,20 @@
               id="message"
               class="form-control"
               placeholder="Введіть повідомлення"
+              style="resize: none"
+              required
             ></textarea>
             <br />
-            <input type="submit" value="Отправить" class="btn btn-danger" />
+            <input type="submit" value="Надіслати" class="btn btn-danger" />
           </form>
         </div>
         <div class="col-6">
           <h3>Повідомлення</h3>
-          <!-- Вывод всех сообщений будет здесь -->
           <div id="all_mess"></div>
         </div>
       </div>
     </div>
-    <!-- Підключаємо JQuery-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <!-- Підключаємо Socket.io-->
     <script src="/socket.io/socket.io.js"></script>
     <script>
       $(function () {
@@ -66,7 +59,6 @@
         var $name = $("#name");
 
         $form.submit(function (e) {
-          // Запобігаємо стандартній поведінці форми
           e.preventDefault();
           socket.emit("send mess", {
             mess: $textarea.val(),
@@ -77,7 +69,7 @@
 
         socket.on("add mess", function (data) {
           $all_messages.append(
-            "<div><b>" + data.name + "</b>: " + data.mess + "</div>"
+            "<div><b>" + data.name + ":</b> " + data.mess + "</div>"
           );
         });
       });
